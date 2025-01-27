@@ -23,7 +23,7 @@ const AddEdit_ComponentMaster = () => {
   const navigate = useNavigate()
   const API_URL = `${API_WEB_URLS.MASTER}/0/token/Sales`
   const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/State`
-  const API_URL_SAVE = "Component/0/token"
+  const API_URL_SAVE = "ComponentMaster/0/token"
   const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/CustomerMasterEdit/Id`
   // Define variables for PageTitle props
   const activeMenu = "Validation";
@@ -34,17 +34,20 @@ const AddEdit_ComponentMaster = () => {
   const handleSubmit = async (values) => {
     try {
       console.log("Form Data:", values);
-    
+      const obj = JSON.parse(localStorage.getItem("authUser"))
+      const formData = new FormData()
+      formData.append("Name", values.Name)
+
   
       Fn_AddEditData(
         dispatch,
         setState,
-        { arguList: {id:state.id, name : values.Name } },
+        { arguList: { id: state.id, formData } },
         API_URL_SAVE,
-        false,
+        true,
         "memberid",
         navigate,
-        "/Customermaster"
+        "/ComponentMaster"
       )
 
     } catch (error) {

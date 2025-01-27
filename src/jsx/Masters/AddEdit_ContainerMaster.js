@@ -1,8 +1,11 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { API_WEB_URLS } from "../../constants/constAPI";
+import { Fn_AddEditData } from "../../store/Functions";
 
 const ContainerMasterSchema = Yup.object().shape({
   InspectionDate: Yup.date().required("Inspection Date is required"),
@@ -36,7 +39,14 @@ const AddEdit_ContainerMaster = () => {
     },
     isProgress: true,
   });
-
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
+  
+  const API_URL = `${API_WEB_URLS.MASTER}/0/token/Sales`
+  const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/State`
+  const API_URL_SAVE = "ComponentMaster/0/token"
+  const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/CustomerMasterEdit/Id`
   // Define variables for PageTitle props
   const activeMenu = "Validation";
   const motherMenu = "Form";
@@ -46,8 +56,30 @@ const AddEdit_ContainerMaster = () => {
   const handleSubmit = async (values) => {
     try {
       console.log("Form Data:", values);
-      // Add your API call here
-      // await apiCall(values); // Example API call
+      const formData = new FormData()
+      formData.append("InspectionDate", values.InspectionDate)
+      formData.append("ContainerNumber", values.ContainerNumber)
+      formData.append("ItemCode", values.ItemCode)
+      formData.append("ItemName", values.ItemName)
+      formData.append("Quantity", values.Quantity)
+      formData.append("ALCode", values.ALCode)
+      formData.append("ItemWidth", values.ItemWidth)
+      formData.append("ItemDepth", values.ItemDepth)
+      formData.append("ItemHeight", values.ItemHeight)
+      formData.append("BatchCode", values.BatchCode)
+      formData.append("UserID", 1)
+
+     
+      Fn_AddEditData(
+        dispatch,
+        setState,
+        { arguList: { id: state.id, formData } },
+        API_URL_SAVE,
+        true,
+        "memberid",
+        navigate,
+        "/CategoryMaster"
+      )
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");

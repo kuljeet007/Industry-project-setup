@@ -1,6 +1,6 @@
 export const API_WEB_URLS = {
 
-  BASE: "https://apibizmatrix.shinewellinnovation.com/api/V1/",
+  BASE: "http://192.168.1.17:7037/api/V1/",
   // BASE: "http://192.168.224.89:7037/api/V1/",
 
   LOGIN: "Authentication/Login",

@@ -16,10 +16,12 @@ export const callEdit_Data_Multipart = (data) => ({
     type: base_acTypes.EDIT_DATA_MULTIPART,
     data: data,
 });
-export const callAdd_Data = (data) => ({
-    type: base_acTypes.ADD_DATA,
-    data: data,
-});
+export const callAdd_Data = (data) => {
+    return {
+        type: base_acTypes.ADD_DATA,
+        data: data,
+    };
+};
 export const callEdit_Data = (data) => ({
     type: base_acTypes.EDIT_DATA,
     data: data,

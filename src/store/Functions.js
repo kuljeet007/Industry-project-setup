@@ -188,7 +188,8 @@ export const Fn_AddEditData = (
             },
         };
 
-        if (arguList.id === 0) {
+        if (arguList.id == 0) {
+         
             if (isMultiPart) dispatch(callAdd_Data_Multipart(request));
             else callAdd_Data(request);
         } else {

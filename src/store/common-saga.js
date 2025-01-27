@@ -9,7 +9,7 @@ import {API_HELPER} from './../helpers/ApiHelper';
 
 
 
-console.log('API_WEB_URLS.BASE', API_WEB_URLS.BASE);
+
 function* sagaFill_GridData(action) {
   const {callback, apiURL} = action.data;
   try {
