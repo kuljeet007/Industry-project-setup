@@ -36,7 +36,9 @@ function* sagaGet_Data(action) {
   }
 }
 function* sagaAdd_Data(action) {
+ 
   const { callback, apiURL, arguList } = action.data;
+
   try {
     const response = yield call(API_HELPER.apiPOST, API_WEB_URLS.BASE + apiURL, arguList);
     if (callback) {
@@ -48,7 +50,7 @@ function* sagaAdd_Data(action) {
 }
 function* sagaAdd_Data_MultiPart(action) {
     const { callback, apiURL, arguList } = action.data;
-    //console.log(arguList);
+    console.log(arguList);
     try {
         const response = yield call(API_HELPER.apiPOST_Multipart, API_WEB_URLS.BASE + apiURL, arguList.formData);
         if (callback) {

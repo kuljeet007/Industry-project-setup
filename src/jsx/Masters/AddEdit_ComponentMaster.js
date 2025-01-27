@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import { useDispatch } from "react-redux";
+import { API_WEB_URLS } from '../../constants/constAPI';
+import { Fn_AddEditData } from '../../store/Functions';
 const NameSchema = Yup.object().shape({
   Name: Yup.string().required("Name is required"),
 });
@@ -16,7 +18,13 @@ const AddEdit_ComponentMaster = () => {
     },
     isProgress: true,
   });
-
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const API_URL = `${API_WEB_URLS.MASTER}/0/token/Sales`
+  const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/State`
+  const API_URL_SAVE = "Component/0/token"
+  const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/CustomerMasterEdit/Id`
   // Define variables for PageTitle props
   const activeMenu = "Validation";
   const motherMenu = "Form";
@@ -26,8 +34,19 @@ const AddEdit_ComponentMaster = () => {
   const handleSubmit = async (values) => {
     try {
       console.log("Form Data:", values);
-      // Add your API call here
-      // await apiCall(values); // Example API call
+    
+  
+      Fn_AddEditData(
+        dispatch,
+        setState,
+        { arguList: {id:state.id, name : values.Name } },
+        API_URL_SAVE,
+        false,
+        "memberid",
+        navigate,
+        "/Customermaster"
+      )
+
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
