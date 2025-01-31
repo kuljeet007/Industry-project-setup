@@ -114,6 +114,7 @@ import JobCardForm from "./Masters/JobCardForm";
 import PageList_ComponentMaster from "./Masters/PageList_ComponentMaster";
 import PageList_CardMaster from "./Masters/PageList_CardMaster";
 import PageList_ContainerMaster from "./Masters/PageList_ContainerMaster";
+import AddEdit_MachineComponentMap from "./Masters/AddEdit_MachineComponentMap";
 
 
 const Markup = () => {
@@ -219,6 +220,7 @@ const Markup = () => {
 
     { url: "JobCardForm", component: <JobCardForm/> },
 
+    { url: "MachineComponentMap", component: <AddEdit_MachineComponentMap/> },
 
 
 
