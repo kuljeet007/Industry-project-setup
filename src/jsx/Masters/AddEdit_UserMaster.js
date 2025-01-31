@@ -53,6 +53,7 @@ const AddEdit_UserMaster = () => {
               <div className="basic-form">
                 <Formik
                   initialValues={formData}
+                  enableReinitialize
                   validationSchema={loginSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {

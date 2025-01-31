@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { API_WEB_URLS } from '../../constants/constAPI';
 import { Fn_FillListData } from '../../store/Functions';
 
-export const PageList_ComponentMaster = () => {
+
+export const PageList_ContainerMaster = () => {
 	const [State, setState] = useState({
 		id: 0,
 		FillArray: [],
@@ -25,9 +26,9 @@ export const PageList_ComponentMaster = () => {
 	const [loading, setLoading] = useState(true);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const API_URL = API_WEB_URLS.MASTER + "/0/token/Components";
-	const rtPage_Add = "/AddComponent";
-	const rtPage_Edit = "/AddComponent";
+	const API_URL = API_WEB_URLS.MASTER + "/0/token/Container";
+	const rtPage_Add = "/AddContainer";
+	const rtPage_Edit = "/AddContainer";
 
 
 	
@@ -54,14 +55,82 @@ export const PageList_ComponentMaster = () => {
 		{
 			Header : 'Id',
 			Footer : 'Id',
-			accessor: 'Id',
+			accessor: 'ID',
 			Filter: ColumnFilter,
 			//disableFilters: true,
 		},
+        	{
+			Header: 'InspectionDate',
+			Footer: 'InspectionDate',
+			accessor: 'InspectionDate',
+			Cell: ({ value }) => {
+			  const date = new Date(value);
+			  return date.toLocaleDateString('en-GB'); // Converts to dd/mm/yyyy format
+			},
+			Filter: DateFilter,
+			filter: (rows, id, filterValue) => {
+			  const [startDate, endDate] = filterValue;
+			  return rows.filter(row => {
+				const rowDate = new Date(row.values[id]);
+				return (
+				  (!startDate || rowDate >= new Date(startDate)) &&
+				  (!endDate || rowDate <= new Date(endDate))
+				);
+			  });
+			},
+		  },
 		{
-			Header : 'Name',
-			Footer : 'Name',
-			accessor: 'Name',
+			Header : 'ContainerNumber',
+			Footer : 'ContainerNumber',
+			accessor: 'ContainerNumber',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ItemCode',
+			Footer : 'ItemCode',
+			accessor: 'ItemCode',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ItemName',
+			Footer : 'ItemName',
+			accessor: 'ItemName',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'Quantity',
+			Footer : 'Quantity',
+			accessor: 'Quantity',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ALCode',
+			Footer : 'ALCode',
+			accessor: 'ALCode',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ItemWidth',
+			Footer : 'ItemWidth',
+			accessor: 'ItemWidth',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ItemDepth',
+			Footer : 'ItemDepth',
+			accessor: 'ItemDepth',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ItemHeight',
+			Footer : 'ItemHeight',
+			accessor: 'ItemHeight',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'BatchCode',
+			Footer : 'BatchCode',
+			accessor: 'BatchCode',
 			Filter: ColumnFilter,
 		},
 
@@ -201,4 +270,4 @@ export const PageList_ComponentMaster = () => {
 	)
 	
 }
-export default PageList_ComponentMaster;
+export default PageList_ContainerMaster;

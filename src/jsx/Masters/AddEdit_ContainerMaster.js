@@ -1,11 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { API_WEB_URLS } from "../../constants/constAPI";
-import { Fn_AddEditData } from "../../store/Functions";
+import { Fn_AddEditData, Fn_DisplayData, Fn_FillListData } from "../../store/Functions";
+
 
 const ContainerMasterSchema = Yup.object().shape({
   InspectionDate: Yup.date().required("Inspection Date is required"),
@@ -45,13 +46,25 @@ const AddEdit_ContainerMaster = () => {
   
   const API_URL = `${API_WEB_URLS.MASTER}/0/token/Sales`
   const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/State`
-  const API_URL_SAVE = "ComponentMaster/0/token"
-  const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/CustomerMasterEdit/Id`
+  const API_URL_SAVE = "ContainerMaster/0/token"
+  const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/Container/Id`
   // Define variables for PageTitle props
   const activeMenu = "Validation";
   const motherMenu = "Form";
   const pageContent = "Validation";
   const cardTitle = "Vertical Forms with icon";
+
+
+    useEffect(() => {
+    Fn_FillListData(dispatch, setState, "FillArray", `${API_URL}/Id/0`)
+    Fn_FillListData(dispatch, setState, "FillArray2", `${API_URL2}/Id/0`)
+    
+    const Id = (location.state && location.state.Id) || 0
+    if (Id > 0) {
+      setState(prevState => ({ ...prevState, id: Id }))
+      Fn_DisplayData(dispatch, setState, Id, API_URL_EDIT)
+    }
+  }, [dispatch, location.state])
 
   const handleSubmit = async (values) => {
     try {
@@ -78,7 +91,7 @@ const AddEdit_ContainerMaster = () => {
         true,
         "memberid",
         navigate,
-        "/CategoryMaster"
+        "/ContainerMaster"
       )
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -104,6 +117,7 @@ const AddEdit_ContainerMaster = () => {
               <div className="basic-form">
                 <Formik
                   initialValues={state.formData}
+                  enableReinitialize
                   validationSchema={ContainerMasterSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {

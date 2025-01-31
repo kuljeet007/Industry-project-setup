@@ -1,11 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { API_WEB_URLS } from '../../constants/constAPI';
-import { Fn_AddEditData } from '../../store/Functions';
+import { Fn_AddEditData, Fn_DisplayData, Fn_FillListData } from '../../store/Functions';
+
 const NameSchema = Yup.object().shape({
   Name: Yup.string().required("Name is required"),
 });
@@ -30,6 +31,17 @@ const AddEdit_ComponentMaster = () => {
   const motherMenu = "Form";
   const pageContent = "Validation";
   const cardTitle = "Form with Name Field";
+
+    useEffect(() => {
+    Fn_FillListData(dispatch, setState, "FillArray", `${API_URL}/Id/0`)
+    Fn_FillListData(dispatch, setState, "FillArray2", `${API_URL2}/Id/0`)
+    
+    const Id = (location.state && location.state.Id) || 0
+    if (Id > 0) {
+      setState(prevState => ({ ...prevState, id: Id }))
+      Fn_DisplayData(dispatch, setState, Id, API_URL_EDIT)
+    }
+  }, [dispatch, location.state])
 
   const handleSubmit = async (values) => {
     try {
@@ -74,6 +86,7 @@ const AddEdit_ComponentMaster = () => {
               <div className="basic-form">
                 <Formik
                   initialValues={state.formData}
+                  enableReinitialize
                   validationSchema={NameSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {

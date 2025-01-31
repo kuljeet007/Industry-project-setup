@@ -21,7 +21,7 @@ const NavHader = () => {
   );
   return (
     <div className="nav-header">
-      <Link to="/dashboard" className="brand-logo">
+      {/* <Link to="/dashboard" className="brand-logo">
         {background.value === "dark" || navigationHader !== "color_1" ? (
           <Fragment>
 				<svg className="logo-abbr" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +61,7 @@ const NavHader = () => {
 				</svg>
           </Fragment>
         )}
-      </Link>
+      </Link> */}
 
       <div
         className="nav-control"

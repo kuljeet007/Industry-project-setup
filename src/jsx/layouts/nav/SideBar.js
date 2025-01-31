@@ -173,7 +173,7 @@ const SideBar = () => {
               })}          
           </ul>		
        
-        <div className="plus-box">
+        {/* <div className="plus-box">
           <img src={plus} alt="" />
           <h5 className="fs-18 font-w700">Add Menus</h5>
           <p className="fs-14 font-w400">Manage your food <br />and beverages menus<i className="fas fa-arrow-right ms-3"></i></p>
@@ -183,7 +183,7 @@ const SideBar = () => {
           <p className="fs-12">Made with <span className="heart"
             onClick={()=>heartBlast()}
           ></span> by DexignZone</p>
-        </div>
+        </div> */}
       </PerfectScrollbar> 
     </div>
   );

@@ -1,11 +1,13 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Fn_AddEditData } from "../../store/Functions";
+import { Fn_AddEditData, Fn_DisplayData, Fn_FillListData } from "../../store/Functions";
 import { useDispatch } from "react-redux";
 import { API_WEB_URLS } from "../../constants/constAPI";
+
+
 
 const NameSchema = Yup.object().shape({
   Name: Yup.string().required("Name is required"),
@@ -24,6 +26,7 @@ const AddEdit_CategoryMaster = () => {
   const navigate = useNavigate()
   
   const API_URL = `${API_WEB_URLS.MASTER}/0/token/CategoryMaster`
+    const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/State`
   const API_URL_SAVE = "CategoryMaster/0/token"
   const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/CustomerMasterEdit/Id`
   // Define variables for PageTitle props
@@ -32,11 +35,33 @@ const AddEdit_CategoryMaster = () => {
   const pageContent = "Masters";
   const cardTitle = "Form with Name Field";
 
+  useEffect(() => {
+    Fn_FillListData(dispatch, setState, "FillArray", `${API_URL}/Id/0`)
+    Fn_FillListData(dispatch, setState, "FillArray2", `${API_URL2}/Id/0`)
+    
+    const Id = (location.state && location.state.Id) || 0
+    if (Id > 0) {
+      setState(prevState => ({ ...prevState, id: Id }))
+      Fn_DisplayData(dispatch, setState, Id, API_URL_EDIT)
+    }
+  }, [dispatch, location.state])
+
   const handleSubmit = async (values) => {
     try {
       console.log("Form Data:", values);
       // const obj = JSON.parse(localStorage.getItem("authUser"))
-      
+      const formData = new FormData()
+      formData.append("Name", values.Name)
+      Fn_AddEditData(
+        dispatch,
+        setState,
+        { arguList: { id: state.id, formData } },
+        API_URL_SAVE,
+        true,
+        "memberid",
+        navigate,
+        "/CategoryMaster"
+      )
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
@@ -61,6 +86,7 @@ const AddEdit_CategoryMaster = () => {
               <div className="basic-form">
                 <Formik
                   initialValues={state.formData}
+                  enableReinitialize
                   validationSchema={NameSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {

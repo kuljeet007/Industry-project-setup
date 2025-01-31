@@ -1,14 +1,16 @@
-import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PageTitle from "../layouts/PageTitle";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { API_WEB_URLS } from "../../constants/constAPI";
+import { Fn_AddEditData, Fn_DisplayData, Fn_FillListData } from "../../store/Functions";
 
 const CardMasterSchema = Yup.object().shape({
   F_CategoryMaster: Yup.string().required("Category is required"),
-  JobCardNumber: Yup.string().required("Job Card Number is required"),
   F_ComponentMaster: Yup.string().required("Component Name is required"),
-  Picture: Yup.mixed().required("Picture is required"),
+  Picture: Yup.mixed(),
   L1: Yup.number().required("L1 is required").positive(),
   W1: Yup.number().required("W1 is required").positive(),
   T1: Yup.number().required("T1 is required").positive(),
@@ -19,12 +21,13 @@ const CardMasterSchema = Yup.object().shape({
   Qty2: Yup.number().required("Qty2 is required").positive(),
 });
 
+
+
 const AddEdit_CardMaster = () => {
   const [state, setState] = useState({
     id: 0,
     formData: {
       F_CategoryMaster: "",
-      JobCardNumber: "",
       F_ComponentMaster: "",
       Picture: null,
       L1: "",
@@ -36,23 +39,62 @@ const AddEdit_CardMaster = () => {
       T2: "",
       Qty2: "",
     },
+    FillArray:[],
+    FillArray2:[],
     isProgress: true,
   });
+const dispatch = useDispatch()
+const location = useLocation()
+const navigate = useNavigate()
+const API_URL = `${API_WEB_URLS.MASTER}/0/token/Category`
+const API_URL2 = `${API_WEB_URLS.MASTER}/0/token/Components`
+const API_URL_SAVE = "MainMaster/0/token"
+const API_URL_EDIT = `${API_WEB_URLS.MASTER}/0/token/MainMaster/Id`
 
-  const categoryOptions = [
-    { Id: 1, Name: "W" },
-    { Id: 2, Name: "X" },
-  ];
 
-  const componentOptions = [
-    { Id: 1, Name: "BACK FRAME" },
-    { Id: 2, Name: "FRONT FRAME" },
-  ];
+
+  
+  useEffect(() => {
+    Fn_FillListData(dispatch, setState, "FillArray", `${API_URL}/Id/0`)
+    Fn_FillListData(dispatch, setState, "FillArray2", `${API_URL2}/Id/0`)
+    
+    const Id = (location.state && location.state.Id) || 0
+    if (Id > 0) {
+      setState(prevState => ({ ...prevState, id: Id }))
+      Fn_DisplayData(dispatch, setState, Id, API_URL_EDIT)
+    }
+  }, [dispatch, location.state])
+
 
   const handleSubmit = async (values) => {
     try {
       console.log("Form Data:", values);
       // Add your API call here
+      const formData = new FormData()
+      formData.append("F_CategoryMaster", values.F_CategoryMaster)
+      formData.append("F_ComponentMaster", values.F_ComponentMaster)
+      formData.append("Picture", values.Picture)
+      formData.append("L1", values.L1)
+      formData.append("W1", values.W1)
+      formData.append("T1", values.T1)
+      formData.append("Qty1", values.Qty1)
+      formData.append("L2", values.L2)
+      formData.append("W2", values.W2)
+      formData.append("T2", values.T2)
+      formData.append("Qty2", values.Qty2)
+      formData.append("UserID", 1)
+
+     
+      Fn_AddEditData(
+        dispatch,
+        setState,
+        { arguList: { id: state.id, formData } },
+        API_URL_SAVE,
+        true,
+        "memberid",
+        navigate,
+        "/CardMaster"
+      )
     } catch (error) {
       console.error("Error submitting form:", error);
       alert("An error occurred while submitting the form. Please try again.");
@@ -76,7 +118,8 @@ const AddEdit_CardMaster = () => {
             <div className="card-body">
               <div className="basic-form">
                 <Formik
-                  initialValues={state.formData}
+                  initialValues={ state.formData }
+                  enableReinitialize
                   validationSchema={CardMasterSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     setTimeout(() => {
@@ -107,7 +150,7 @@ const AddEdit_CardMaster = () => {
                               value={values.F_CategoryMaster}
                             >
                               <option value="">Select Category</option>
-                              {categoryOptions.map((option) => (
+                              {state.FillArray.length>0 && state.FillArray.map((option) => (
                                 <option key={option.Id} value={option.Id}>
                                   {option.Name}
                                 </option>
@@ -116,24 +159,6 @@ const AddEdit_CardMaster = () => {
                             {errors.F_CategoryMaster && (
                               <div className="text-danger">
                                 {errors.F_CategoryMaster}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="form-group">
-                            <label className="text-label">Job Card Number *</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              name="JobCardNumber"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.JobCardNumber}
-                            />
-                            {errors.JobCardNumber && (
-                              <div className="text-danger">
-                                {errors.JobCardNumber}
                               </div>
                             )}
                           </div>
@@ -152,7 +177,7 @@ const AddEdit_CardMaster = () => {
                               value={values.F_ComponentMaster}
                             >
                               <option value="">Select Component</option>
-                              {componentOptions.map((option) => (
+                              {state.FillArray2.length>0 && state.FillArray2.map((option) => (
                                 <option key={option.Id} value={option.Id}>
                                   {option.Name}
                                 </option>

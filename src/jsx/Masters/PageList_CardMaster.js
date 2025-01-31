@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_WEB_URLS } from '../../constants/constAPI';
 import { Fn_FillListData } from '../../store/Functions';
 
-export const PageList_ComponentMaster = () => {
+export const PageList_CardMaster = () => {
 	const [State, setState] = useState({
 		id: 0,
 		FillArray: [],
@@ -25,9 +25,10 @@ export const PageList_ComponentMaster = () => {
 	const [loading, setLoading] = useState(true);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const API_URL = API_WEB_URLS.MASTER + "/0/token/Components";
-	const rtPage_Add = "/AddComponent";
-	const rtPage_Edit = "/AddComponent";
+	const API_URL = API_WEB_URLS.MASTER + "/0/token/MainMaster";
+	const rtPage_Add = "/AddCard";
+	const rtPage_Edit = "/AddCard";
+	const rtPage_Job = "/jobcardform";
 
 
 	
@@ -50,6 +51,11 @@ export const PageList_ComponentMaster = () => {
 		navigate(rtPage_Edit, { state: { Id } });
 	  };
 	
+	  const btnCreateJobCard = (Id) => {
+        navigate(rtPage_Job, { state: { Id } });
+       console.log('created',Id)
+	  };
+	
 	const COLUMNS = [
 		{
 			Header : 'Id',
@@ -59,9 +65,69 @@ export const PageList_ComponentMaster = () => {
 			//disableFilters: true,
 		},
 		{
-			Header : 'Name',
-			Footer : 'Name',
-			accessor: 'Name',
+			Header : 'CategoryName',
+			Footer : 'CategoryName',
+			accessor: 'CategoryName',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'ComponentName',
+			Footer : 'ComponentName',
+			accessor: 'ComponentName',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'JobCardNo',
+			Footer : 'JobCardNo',
+			accessor: 'JobCardNo',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'L1',
+			Footer : 'L1',
+			accessor: 'L1',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'W1',
+			Footer : 'W1',
+			accessor: 'W1',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'T1',
+			Footer : 'T1',
+			accessor: 'T1',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'Qty1',
+			Footer : 'Qty1',
+			accessor: 'Qty1',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'L2',
+			Footer : 'L2',
+			accessor: 'L2',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'W2',
+			Footer : 'W2',
+			accessor: 'W2',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'T2',
+			Footer : 'T2',
+			accessor: 'T2',
+			Filter: ColumnFilter,
+		},
+		{
+			Header : 'Qty2',
+			Footer : 'Qty2',
+			accessor: 'Qty2',
 			Filter: ColumnFilter,
 		},
 
@@ -75,6 +141,20 @@ export const PageList_ComponentMaster = () => {
 			  >
 				Edit
 			  </Button>
+			),
+		  }, 
+		  {
+			Header: "Create",
+			Cell: ({ row }) => (
+			  row.original.JobCardNo === null ? (
+				<Button
+				  variant="warning"
+				  size="sm"
+				  onClick={() => btnCreateJobCard(row.original.Id)}
+				>
+				  Create Job Card
+				</Button>
+			  ) : null
 			),
 		  }, 
 
@@ -201,4 +281,4 @@ export const PageList_ComponentMaster = () => {
 	)
 	
 }
-export default PageList_ComponentMaster;
+export default PageList_CardMaster;

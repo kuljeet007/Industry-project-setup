@@ -1,7 +1,29 @@
-import React from "react";
-import { Row, Col } from "react-bootstrap";
+import React, { useState } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 
 const JobCardForm = () => {
+  const [machines, setMachines] = useState([
+    { Id: 1, Name: "Double Side Planner" },
+    { Id: 2, Name: "Cross Cut 1" },
+  ]);
+  const [rows, setRows] = useState([{ id: 1, machine: "", quantity: "", rejection: "", allocatedTime: "", time: "", name: "" }]);
+
+  const handleAddRow = () => {
+    setRows([...rows, { id: rows.length + 1, machine: "", quantity: "", rejection: "", allocatedTime: "", time: "", name: "" }]);
+  };
+
+  const handleDeleteRow = (index) => {
+    const newRows = rows.filter((_, i) => i !== index);
+    setRows(newRows);
+  };
+
+  const handleChange = (index, event) => {
+    const { name, value } = event.target;
+    const newRows = [...rows];
+    newRows[index][name] = value;
+    setRows(newRows);
+  };
+
   return (
     <div className="border border-gray-300 w-full text-sm">
       {/* Header Row */}
@@ -114,46 +136,114 @@ const JobCardForm = () => {
 
       <div className="mt-4 border-t-2 border-green-500 pt-2">
         <p className="text-green-600 font-bold">Machine Details</p>
-        <table className="w-full border-collapse border border-green-500 mt-2">
-          <thead>
-            <tr>
-              <th className="border border-green-500 p-2">MACHINE NUMBER</th>
-              <th className="border border-green-500 p-2">DATE</th>
-              <th className="border border-green-500 p-2">MACHINE</th>
-              <th className="border border-green-500 p-2">PROCESS</th>
-              <th className="border border-green-500 p-2">QUANTITY</th>
-              <th className="border border-green-500 p-2">REJECTION</th>
-              <th className="border border-green-500 p-2">ALLOCATED TIME (in minutes)</th>
-              <th className="border border-green-500 p-2">TIME</th>
-              <th className="border border-green-500 p-2">NAME</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-green-500 p-2">1</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">Double Side Planner</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">ST</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-            </tr>
-            <tr>
-              <td className="border border-green-500 p-2">2</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">Cross Cut 1</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">ET</td>
-              <td className="border border-green-500 p-2">-</td>
-              <td className="border border-green-500 p-2">-</td>
-            </tr>
-            {/* Add more rows as needed */}
-          </tbody>
-        </table>
+        <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '300px' }}>
+          <table className="w-full border-collapse border border-green-500 mt-2">
+            <thead>
+              <tr>
+                <th className="border border-green-500 p-2">MACHINE NUMBER</th>
+                <th className="border border-green-500 p-2">DATE</th>
+                <th className="border border-green-500 p-2">MACHINE</th>
+                <th className="border border-green-500 p-2">PROCESS</th>
+                <th className="border border-green-500 p-2">QUANTITY</th>
+                <th className="border border-green-500 p-2">REJECTION</th>
+                <th className="border border-green-500 p-2">ALLOCATED TIME (in minutes)</th>
+                <th className="border border-green-500 p-2">TIME</th>
+                <th className="border border-green-500 p-2">NAME</th>
+                <th className="border border-green-500 p-2">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={row.id}>
+                  <td className="border border-green-500 p-2">{row.id}</td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      type="date"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.date || new Date().toISOString().split('T')[0]}
+                      onChange={(e) => handleChange(index, e)}
+                      name="date"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <select
+                      name="machine"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.machine}
+                      onChange={(e) => handleChange(index, e)}
+                    >
+                      <option value="">Select Machine</option>
+                      {machines.map(machine => (
+                        <option key={machine.Id} value={machine.Name}>
+                          {machine.Name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="process"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.process}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter process"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="quantity"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.quantity}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter quantity"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="rejection"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.rejection}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter rejection"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="allocatedTime"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.allocatedTime}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter allocated time"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="time"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.time}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter time"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <input
+                      name="name"
+                      className="form-control border border-gray-300 p-1"
+                      value={row.name}
+                      onChange={(e) => handleChange(index, e)}
+                      placeholder="Enter name"
+                    />
+                  </td>
+                  <td className="border border-green-500 p-2">
+                    <Button variant="danger" onClick={() => handleDeleteRow(index)}>Delete</Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Add more rows as needed */}
+            </tbody>
+          </table>
+        </div>
+        <Button variant="primary" onClick={handleAddRow}>Add Row</Button>
       </div>
       <div className="mt-4">
         <p className="text-green-600 font-bold">NOTES</p>

@@ -112,6 +112,8 @@ import AddEdit_CategoryMaster from "./Masters/AddEdit_CategoryMaster";
 import AddEdit_CardMaster from "./Masters/AddEdit_CardMaster";
 import JobCardForm from "./Masters/JobCardForm";
 import PageList_ComponentMaster from "./Masters/PageList_ComponentMaster";
+import PageList_CardMaster from "./Masters/PageList_CardMaster";
+import PageList_ContainerMaster from "./Masters/PageList_ContainerMaster";
 
 
 const Markup = () => {
@@ -205,6 +207,7 @@ const Markup = () => {
     { url: "AddUser", component: <AddEdit_UserMaster/> },
 
     { url: "AddContainer", component: <AddEdit_ContainerMaster/> },
+    { url: "ContainerMaster", component: <PageList_ContainerMaster/> },
 
     { url: "AddComponent", component: <AddEdit_ComponentMaster/> },
     { url: "ComponentMaster", component: <PageList_ComponentMaster/> },
@@ -212,6 +215,7 @@ const Markup = () => {
     { url: "AddCategory", component: <AddEdit_CategoryMaster/> },
 
     { url: "AddCard", component: <AddEdit_CardMaster/> },
+    { url: "CardMaster", component: <PageList_CardMaster/> },
 
     { url: "JobCardForm", component: <JobCardForm/> },
 
